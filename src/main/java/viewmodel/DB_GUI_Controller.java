@@ -41,11 +41,21 @@ public class DB_GUI_Controller implements Initializable {
     private TableColumn<Person, Integer> tv_id;
     @FXML
     private TableColumn<Person, String> tv_fn, tv_ln, tv_department, tv_major, tv_email;
+    @FXML
+    private Button editBtn;
+
+    @FXML
+    private Button deleteBtn;
+
+    @FXML
+    private Button addBtn;
     private final DbConnectivityClass cnUtil = new DbConnectivityClass();
     private final ObservableList<Person> data = cnUtil.getData();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        editBtn.setDisable(true);
+        deleteBtn.setDisable(true);
         try {
             tv_id.setCellValueFactory(new PropertyValueFactory<>("id"));
             tv_fn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -54,11 +64,27 @@ public class DB_GUI_Controller implements Initializable {
             tv_major.setCellValueFactory(new PropertyValueFactory<>("major"));
             tv_email.setCellValueFactory(new PropertyValueFactory<>("email"));
             tv.setItems(data);
+            tv.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                editBtn.setDisable(newValue == null);
+            });
+
+            tv.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                deleteBtn.setDisable(newValue == null);
+            });
+
         } catch (Exception e) {
             throw new RuntimeException(e);
+
         }
     }
-
+    private void validateForm() {
+        boolean isValid = !first_name.getText().trim().isEmpty() &&
+                !last_name.getText().trim().isEmpty() &&
+                !department.getText().trim().isEmpty() &&
+                !major.getText().trim().isEmpty() &&
+                email.getText().matches("^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$"); // Email validation
+        addBtn.setDisable(!isValid); // Enable "Add" button if all fields are valid
+    }
     @FXML
     protected void addNewRecord() {
 
