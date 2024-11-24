@@ -26,6 +26,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
 
 public class DB_GUI_Controller implements Initializable {
 
@@ -49,6 +50,8 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     private Button addBtn;
+    @FXML
+    private ComboBox<Major> majorDropdown;
     private final DbConnectivityClass cnUtil = new DbConnectivityClass();
     private final ObservableList<Person> data = cnUtil.getData();
 
@@ -56,6 +59,7 @@ public class DB_GUI_Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         editBtn.setDisable(true);
         deleteBtn.setDisable(true);
+        setupMajorDropdown();
         try {
             tv_id.setCellValueFactory(new PropertyValueFactory<>("id"));
             tv_fn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -71,12 +75,44 @@ public class DB_GUI_Controller implements Initializable {
             tv.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 deleteBtn.setDisable(newValue == null);
             });
-
+            setupFieldValidation();
         } catch (Exception e) {
             throw new RuntimeException(e);
 
         }
     }
+
+
+    private void setupMajorDropdown() {
+        majorDropdown.setItems(FXCollections.observableArrayList(Major.values()));
+        majorDropdown.setValue(Major.CSC);
+    }
+    private void setupFieldValidation() {
+
+        String nameRegex = "^[A-Za-z\\s]+$";
+        String departmentRegex = "^[A-Za-z\\s]+$";
+        String emailRegex = "^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";
+
+        addRegexValidation(first_name, nameRegex);
+        addRegexValidation(last_name, nameRegex);
+        addRegexValidation(department, departmentRegex);
+        addRegexValidation(email, emailRegex);
+
+        first_name.textProperty().addListener((observable, oldValue, newValue) -> validateForm());
+        last_name.textProperty().addListener((observable, oldValue, newValue) -> validateForm());
+        department.textProperty().addListener((observable, oldValue, newValue) -> validateForm());
+        email.textProperty().addListener((observable, oldValue, newValue) -> validateForm());
+        majorDropdown.valueProperty().addListener((observable, oldValue, newValue) -> validateForm());
+    }
+
+    private void addRegexValidation(TextField textField, String regex) {
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+            return newText.matches(regex) || newText.isEmpty() ? change : null;
+        };
+        textField.setTextFormatter(new TextFormatter<>(filter));
+    }
+
     private void validateForm() {
         boolean isValid = !first_name.getText().trim().isEmpty() &&
                 !last_name.getText().trim().isEmpty() &&
@@ -88,7 +124,7 @@ public class DB_GUI_Controller implements Initializable {
     @FXML
     protected void addNewRecord() {
 
-            Person p = new Person(first_name.getText(), last_name.getText(), department.getText(),
+            Person p = new Person(first_name.getText(), last_name.getText(), department.getText(), majorDropdown.getValue().name(),
                     major.getText(), email.getText(), imageURL.getText());
             cnUtil.insertUser(p);
             cnUtil.retrieveId(p);
@@ -106,6 +142,7 @@ public class DB_GUI_Controller implements Initializable {
         major.setText("");
         email.setText("");
         imageURL.setText("");
+        majorDropdown.setValue(Major.CSC);
     }
 
     @FXML

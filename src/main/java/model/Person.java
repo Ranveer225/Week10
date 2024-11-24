@@ -31,6 +31,9 @@ public class Person {
         this.imageURL = imageURL;
     }
 
+    public Person(String text, String text1, String text2, String name, String text3, String text4, String text5) {
+    }
+
     public String getEmail() {
         return email;
     }

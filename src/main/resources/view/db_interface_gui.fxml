@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ComboBox?>
 <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="920.0" styleClass="anchor_pane" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewmodel.DB_GUI_Controller">
     <children>
         <BorderPane fx:id="borderPane" layoutX="-2.0" layoutY="-3.0" prefHeight="597.0" prefWidth="908.0">
@@ -131,6 +132,7 @@
                         </Button>
                     </children>
                 </VBox>
+             <ComboBox fx:id="majorDropdown" layoutX="100" layoutY="200" />
          </right>
          <center>
                 <TableView fx:id="tv" onMouseClicked="#selectedItemTV" prefHeight="539.0" prefWidth="566.0" styleClass="table_view" BorderPane.alignment="CENTER">
