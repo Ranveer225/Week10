@@ -12,7 +12,7 @@
 }
 
 .left_pane {
-    -fx-background-color: #a73;
+    -fx-background-color: #ff0000;
     -fx-pref-width: 130px;
     -fx-pref-height: 600px;
 }
@@ -28,15 +28,15 @@
 
 
 .menu_bar {
-    -fx-background-color: #841;
+    -fx-background-color: #90ee90;
 }
 
 .anchor_pane {
-    -fx-background-color: #a73;
+    -fx-background-color: #ff0000;
 }
 
 .text_field_pane {
-    -fx-background-color: #79dc05;
+    -fx-background-color: #90ee90;
 
 }
 
