@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.prefs.Preferences;
 
-public class UserSession {
+    public class UserSession {
 
     private static volatile UserSession instance;
 
@@ -36,6 +36,12 @@ public class UserSession {
 
     public static UserSession getInstance(String userName, String password) {
         return getInstance(userName, password, "NONE");
+    }
+
+    public static boolean validateUser(String username, String password) {
+        Preferences prefs = Preferences.userRoot();
+        String storedPassword = prefs.get("USER_" + username, null);
+        return storedPassword != null && storedPassword.equals(password);
     }
 
     public synchronized String getUserName() {

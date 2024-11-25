@@ -10,6 +10,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
 <GridPane alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1100.0" style="-fx-border-color: BLACK;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewmodel.SignUpController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="460.0" minWidth="10.0" prefWidth="162.0" />
@@ -73,6 +75,12 @@
                     </VBox.margin>
                 </Button>
             </children>
+            <Label text="Sign Up" styleClass="title-label" />
+            <TextField fx:id="usernameField" promptText="Enter Username" />
+            <PasswordField fx:id="passwordField" promptText="Enter Password" />
+            <Button text="Create Account" onAction="#createNewAccount" />
+            <Label fx:id="statusLabel" text="" styleClass="status-label" />
+            <Button text="Back to Login" onAction="#goBack" />
         </VBox>
         <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="7" GridPane.rowSpan="2" />
         <VBox alignment="BOTTOM_CENTER" prefHeight="280.0" prefWidth="298.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="9">
