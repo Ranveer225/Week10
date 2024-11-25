@@ -22,9 +22,11 @@ import javafx.stage.Stage;
 import model.Person;
 import service.MyLogger;
 
-import java.io.File;
+import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
@@ -212,6 +214,59 @@ public class DB_GUI_Controller implements Initializable {
             img_view.setImage(new Image(file.toURI().toString()));
         }
     }
+    @FXML
+    protected void importCsvFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select CSV File to Import");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                List<Person> importedData = new ArrayList<>();
+                while ((line = reader.readLine()) != null) {
+                    String[] fields = line.split(","); // Assumes CSV is comma-separated
+                    if (fields.length >= 6) { // Adjust based on your Person model
+                        Person person = new Person(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
+                        importedData.add(person);
+                    }
+                }
+                data.setAll(importedData); // Update the TableView's data
+                updateStatus("CSV imported successfully.");
+            } catch (IOException e) {
+                updateStatus("Failed to import CSV: " + e.getMessage());
+            }
+        }
+    }
+
+    @FXML
+    protected void exportCsvFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                for (Person person : data) {
+                    String csvLine = String.join(",",
+                            person.getFirstName(),
+                            person.getLastName(),
+                            person.getDepartment(),
+                            person.getMajor(),
+                            person.getEmail(),
+                            person.getImageURL());
+                    writer.write(csvLine);
+                    writer.newLine();
+                }
+                updateStatus("CSV exported successfully.");
+            } catch (IOException e) {
+                updateStatus("Failed to export CSV: " + e.getMessage());
+            }
+        }
+    }
+
 
     @FXML
     protected void addRecord() {
@@ -302,3 +357,4 @@ public class DB_GUI_Controller implements Initializable {
         statusLabel.setText(message);
     }
 }
+
