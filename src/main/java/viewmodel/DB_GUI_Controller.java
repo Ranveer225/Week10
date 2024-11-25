@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 import model.Person;
 import service.MyLogger;
 
@@ -52,6 +53,10 @@ public class DB_GUI_Controller implements Initializable {
     private Button addBtn;
     @FXML
     private ComboBox<Major> majorDropdown;
+
+    @FXML
+    private Label statusLabel;
+
     private final DbConnectivityClass cnUtil = new DbConnectivityClass();
     private final ObservableList<Person> data = cnUtil.getData();
 
@@ -131,6 +136,7 @@ public class DB_GUI_Controller implements Initializable {
             p.setId(cnUtil.retrieveId(p));
             data.add(p);
             clearForm();
+         updateStatus("Record added successfully!");
 
     }
 
@@ -187,6 +193,7 @@ public class DB_GUI_Controller implements Initializable {
         data.remove(p);
         data.add(index, p2);
         tv.getSelectionModel().select(index);
+        updateStatus("Record updated successfully.");
     }
 
     @FXML
@@ -291,5 +298,7 @@ public class DB_GUI_Controller implements Initializable {
             this.major = venue;
         }
     }
-
+    private void updateStatus(String message) {
+        statusLabel.setText(message);
+    }
 }
