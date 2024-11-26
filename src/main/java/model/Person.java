@@ -77,7 +77,6 @@ public class Person {
         this.major = major;
     }
 
-
     public String getDepartment() {
         return department;
     }

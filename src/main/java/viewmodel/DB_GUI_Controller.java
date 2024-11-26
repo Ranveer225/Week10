@@ -132,8 +132,6 @@ public class DB_GUI_Controller implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
-
     private void setupMajorDropdown() {
         majorDropdown.setItems(FXCollections.observableArrayList(Major.values()));
         majorDropdown.setValue(Major.Sales);
