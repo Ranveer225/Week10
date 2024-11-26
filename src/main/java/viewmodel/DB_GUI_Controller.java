@@ -418,3 +418,4 @@ public class DB_GUI_Controller implements Initializable {
 // the controller. Then I added in a method that clears all fields to test this functioning. Next, I added in row editing for table view and the
 // process of adding rows directly in the table. I had to make each column editable by using TextFieldTableCell and updated the data when editing finishes.
 // Lastly, I updated the person class so it supports editing by adding constructors and methods properly and added functionality to add a new row.
+
