@@ -27,7 +27,7 @@ public class MainApplication extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setResizable(false);
         primaryStage.getIcons().add(icon);
-        primaryStage.setTitle("Student Course System");
+        primaryStage.setTitle("Business Client Database");
         showScene1();
     }
 

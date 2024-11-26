@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -25,11 +26,9 @@ import service.MyLogger;
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 public class DB_GUI_Controller implements Initializable {
 
@@ -59,6 +58,10 @@ public class DB_GUI_Controller implements Initializable {
     @FXML
     private Label statusLabel;
 
+    @FXML
+    private Button clearAllBtn;
+
+
     private final DbConnectivityClass cnUtil = new DbConnectivityClass();
     private final ObservableList<Person> data = cnUtil.getData();
 
@@ -74,25 +77,66 @@ public class DB_GUI_Controller implements Initializable {
             tv_department.setCellValueFactory(new PropertyValueFactory<>("department"));
             tv_major.setCellValueFactory(new PropertyValueFactory<>("major"));
             tv_email.setCellValueFactory(new PropertyValueFactory<>("email"));
-            tv.setItems(data);
-            tv.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                editBtn.setDisable(newValue == null);
+
+            tv.setEditable(true);
+
+
+            tv_fn.setCellFactory(TextFieldTableCell.forTableColumn());
+            tv_ln.setCellFactory(TextFieldTableCell.forTableColumn());
+            tv_department.setCellFactory(TextFieldTableCell.forTableColumn());
+            tv_major.setCellFactory(TextFieldTableCell.forTableColumn());
+            tv_email.setCellFactory(TextFieldTableCell.forTableColumn());
+
+
+            tv_fn.setOnEditCommit(event -> {
+                Person person = event.getRowValue();
+                person.setFirstName(event.getNewValue());
             });
 
+            tv_ln.setOnEditCommit(event -> {
+                Person person = event.getRowValue();
+                person.setLastName(event.getNewValue());
+            });
+
+            tv_department.setOnEditCommit(event -> {
+                Person person = event.getRowValue();
+                person.setDepartment(event.getNewValue());
+            });
+
+            tv_major.setOnEditCommit(event -> {
+                Person person = event.getRowValue();
+                person.setMajor(event.getNewValue());
+            });
+
+            tv_email.setOnEditCommit(event -> {
+                Person person = event.getRowValue();
+                person.setEmail(event.getNewValue());
+            });
+
+            tv.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && tv.getSelectionModel().getSelectedItem() == null) {
+                    Person newPerson = new Person("", "", "", "", "", "");
+                    data.add(newPerson);
+                }
+            });
+
+            tv.setItems(data);
+
             tv.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                editBtn.setDisable(newValue == null);
                 deleteBtn.setDisable(newValue == null);
             });
+
             setupFieldValidation();
         } catch (Exception e) {
             throw new RuntimeException(e);
-
         }
     }
 
 
     private void setupMajorDropdown() {
         majorDropdown.setItems(FXCollections.observableArrayList(Major.values()));
-        majorDropdown.setValue(Major.CSC);
+        majorDropdown.setValue(Major.Sales);
     }
     private void setupFieldValidation() {
 
@@ -150,7 +194,7 @@ public class DB_GUI_Controller implements Initializable {
         major.setText("");
         email.setText("");
         imageURL.setText("");
-        majorDropdown.setValue(Major.CSC);
+        majorDropdown.setValue(Major.Finance);
     }
 
     @FXML
@@ -267,7 +311,6 @@ public class DB_GUI_Controller implements Initializable {
         }
     }
 
-
     @FXML
     protected void addRecord() {
         showSomeone();
@@ -339,7 +382,20 @@ public class DB_GUI_Controller implements Initializable {
         });
     }
 
-    private static enum Major {Business, CSC, CPIS}
+    @FXML
+    protected void clearAllFields() {
+        first_name.setText("");
+        last_name.setText("");
+        department.setText("");
+        email.setText("");
+        imageURL.setText("");
+
+        majorDropdown.setValue(null);
+
+        statusLabel.setText("All fields have been cleared!");
+    }
+
+    private static enum Major {Finance, Sales, Analyst}
 
     private static class Results {
 
@@ -358,3 +414,9 @@ public class DB_GUI_Controller implements Initializable {
     }
 }
 
+// Documentation: The changes I implemented into this app were rebranding and styling the theme along with adding in new fields for this.
+// It started off as a student registration form and I replaced the majors with roles as part of a business client system. I added in a clear all button
+// as well that removes all the data in the form and resets dropdowns. I added in a new button in our interface fxml file for this and connected it with
+// the controller. Then I added in a method that clears all fields to test this functioning. Next, I added in row editing for table view and the
+// process of adding rows directly in the table. I had to make each column editable by using TextFieldTableCell and updated the data when editing finishes.
+// Lastly, I updated the person class so it supports editing by adding constructors and methods properly and added functionality to add a new row.
