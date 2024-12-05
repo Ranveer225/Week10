@@ -19,10 +19,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import model.Person;
 import service.MyLogger;
-
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
@@ -40,6 +38,7 @@ public class DB_GUI_Controller implements Initializable {
     MenuBar menuBar;
     @FXML
     private TableView<Person> tv;
+
     @FXML
     private TableColumn<Person, Integer> tv_id;
     @FXML
@@ -169,6 +168,7 @@ public class DB_GUI_Controller implements Initializable {
                 !major.getText().trim().isEmpty() &&
                 email.getText().matches("^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$"); // Email validation
         addBtn.setDisable(!isValid); // Enable "Add" button if all fields are valid
+        major.setPrefWidth(202.0); // Matches the other fields
     }
     @FXML
     protected void addNewRecord() {
@@ -193,6 +193,7 @@ public class DB_GUI_Controller implements Initializable {
         email.setText("");
         imageURL.setText("");
         majorDropdown.setValue(Major.Finance);
+        img_view.setImage(new Image(getClass().getResource("/images/profile.png").toString()));
     }
 
     @FXML
@@ -228,6 +229,20 @@ public class DB_GUI_Controller implements Initializable {
     }
 
     @FXML
+    protected void displayHelp() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/help.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Help");
+            Scene scene = new Scene(root, 600, 400);
+            stage.setScene(scene);
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     protected void editRecord() {
         Person p = tv.getSelectionModel().getSelectedItem();
         int index = data.indexOf(p);
@@ -251,17 +266,26 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     protected void showImage() {
-        File file = (new FileChooser()).showOpenDialog(img_view.getScene().getWindow());
-        if (file != null) {
-            img_view.setImage(new Image(file.toURI().toString()));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Profile Image");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        File selectedFile = fileChooser.showOpenDialog(img_view.getScene().getWindow());
+        if (selectedFile != null) {
+            String imagePath = selectedFile.toURI().toString();
+            img_view.setImage(new Image(imagePath));
+            Person selectedPerson = tv.getSelectionModel().getSelectedItem();
+            if (selectedPerson != null) {
+                selectedPerson.setImageURL(imagePath);
+                updateStatus("Image updated successfully!");
+            }
         }
     }
+
     @FXML
     protected void importCsvFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select CSV File to Import");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -311,19 +335,62 @@ public class DB_GUI_Controller implements Initializable {
 
     @FXML
     protected void addRecord() {
-        showSomeone();
+        String defaultImagePath = getClass().getResource("/images/profile.png").toString();
+        Person p = new Person(
+                first_name.getText(),
+                last_name.getText(),
+                department.getText(),
+                majorDropdown.getValue().name(),
+                email.getText(),
+                imageURL.getText().isEmpty() ? defaultImagePath : imageURL.getText()
+        );
+        cnUtil.insertUser(p);
+        data.add(p);
+        clearForm();
+        updateStatus("Record added successfully!");
     }
 
     @FXML
     protected void selectedItemTV(MouseEvent mouseEvent) {
-        Person p = tv.getSelectionModel().getSelectedItem();
-        first_name.setText(p.getFirstName());
-        last_name.setText(p.getLastName());
-        department.setText(p.getDepartment());
-        major.setText(p.getMajor());
-        email.setText(p.getEmail());
-        imageURL.setText(p.getImageURL());
+        Person selectedPerson = tv.getSelectionModel().getSelectedItem();
+
+        if (selectedPerson != null) {
+            first_name.setText(selectedPerson.getFirstName());
+            last_name.setText(selectedPerson.getLastName());
+            department.setText(selectedPerson.getDepartment());
+            major.setText(selectedPerson.getMajor());
+            email.setText(selectedPerson.getEmail());
+            imageURL.setText(selectedPerson.getImageURL());
+
+            String imagePath = selectedPerson.getImageURL();
+
+            if (imagePath != null && !imagePath.isEmpty()) {
+                try {
+                    img_view.setImage(new Image(imagePath, true));
+                } catch (IllegalArgumentException e) {
+                    loadDefaultImage(selectedPerson.getMajor());
+                }
+            } else {
+                loadDefaultImage(selectedPerson.getMajor());
+            }
+        }
     }
+    private void loadDefaultImage(String major) {
+        switch (major) {
+            case "Finance":
+                img_view.setImage(new Image(getClass().getResource("/images/finance.png").toString()));
+                break;
+            case "Sales":
+                img_view.setImage(new Image(getClass().getResource("/images/sales.jpg").toString()));
+                break;
+            case "Analyst":
+                img_view.setImage(new Image(getClass().getResource("/images/analyst.png").toString()));
+                break;
+            default:
+                img_view.setImage(new Image(getClass().getResource("/images/profile.png").toString()));
+        }
+    }
+
 
     public void lightTheme(ActionEvent actionEvent) {
         try {
@@ -391,6 +458,40 @@ public class DB_GUI_Controller implements Initializable {
         majorDropdown.setValue(null);
 
         statusLabel.setText("All fields have been cleared!");
+    }
+
+    @FXML
+    protected void uploadFile(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select a File to Upload");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*"),
+                new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                new FileChooser.ExtensionFilter("CSV Files", "*.csv"),
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File file = fileChooser.showOpenDialog(img_view.getScene().getWindow());
+
+        if (file != null) {
+            try {
+                processUploadedFile(file);
+                updateStatus("File uploaded successfully: " + file.getName());
+            } catch (Exception e) {
+                updateStatus("Failed to upload file: " + e.getMessage());
+            }
+        } else {
+            updateStatus("File upload canceled.");
+        }
+    }
+
+    private void processUploadedFile(File file) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        }
     }
 
     private static enum Major {Finance, Sales, Analyst}

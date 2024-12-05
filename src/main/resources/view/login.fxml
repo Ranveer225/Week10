@@ -14,7 +14,7 @@
 
 <GridPane fx:id="rootpane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
           minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1100.0"
-          styleClass="grid_pane" style="-fx-background-color: #D2B48C;"
+          styleClass="grid_pane" style="-fx-background-color: black; -fx-border-color: gray; -fx-border-width: 2px;"
           xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="viewmodel.LoginController">
     <columnConstraints>
@@ -51,14 +51,14 @@
                 <HBox alignment="CENTER" spacing="20.0">
                     <Button fx:id="loginBtn" alignment="CENTER" contentDisplay="CENTER"
                             mnemonicParsing="false" onAction="#login" prefHeight="40.0"
-                            prefWidth="208.0" style="-fx-background-color: Green; -fx-border-color: BLACK;"
+                            prefWidth="208.0" style="-fx-background-color: #1E90FF; -fx-border-color: gray;"
                             styleClass="login_button" text="Login" textAlignment="CENTER" textFill="WHITE">
                         <font>
                             <Font name="System Bold" size="18.0" />
                         </font>
                     </Button>
                     <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#signUp"
-                            prefHeight="40.0" prefWidth="210.0" style="-fx-background-color: RED; -fx-border-color: BLACK;"
+                            prefHeight="40.0" prefWidth="210.0" style="-fx-background-color: #FF6347; -fx-border-color: gray;"
                             styleClass="login_button" text="Sign Up" textFill="WHITE">
                         <font>
                             <Font name="System Bold" size="15.0" />

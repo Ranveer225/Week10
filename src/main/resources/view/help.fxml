@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <TextArea layoutX="6.0" layoutY="51.0" prefHeight="343.0" prefWidth="584.0" text="Using the Business Client Database application is simple and straightforward. You can add new client records by filling in details like name, email, and department. Editing or deleting a record is just as easy with a click of a button. The app also supports importing and exporting data through CSV files, so you can share or back up information anytime. To customize the interface, you can switch between light and dark themes. If you need to change your profile picture, just click on the image area to upload a new one. For information on other assistance, please contact... " wrapText="true">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </TextArea>
+        <Label alignment="TOP_LEFT" layoutX="8.0" layoutY="11.0" prefHeight="44.0" prefWidth="542.0" text="Help Section">
+            <font>
+                <Font name="System Bold" size="26.0" />
+            </font>
+        </Label>
+    </children>
+</AnchorPane>

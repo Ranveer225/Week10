@@ -3,25 +3,23 @@
 }
 
 .db_btn {
-    -fx-background-color: #555;
-    -fx-radius: 2;
+    -fx-background-color: #333; /* Dark gray */
     -fx-cursor: hand;
     -fx-font-family: "Arial";
-    -fx-font-size: 14px;
+    -fx-font-size: 15px;
     -fx-text-alignment: center;
-    -fx-text-fill: #d5d5d5;
+    -fx-text-fill: white;
     -fx-alignment: CENTER;
     -fx-background-radius: 10;
     -fx-pref-width: 200px;
-    -fx-pref-height: 40px;
-    -fx-text-fill: white;
+    -fx-pref-height: 50px;
 }
 
 .left_pane {
-    -fx-background-color: #313131;
+    -fx-background-color: #1e1e1e; /* Darker gray */
     -fx-pref-width: 130px;
     -fx-pref-height: 600px;
-        -fx-text-fill: white;
+    -fx-text-fill: white;
 }
 
 .admin_section {
@@ -29,31 +27,31 @@
 }
 
 .table_columns {
-    -fx-background-color: #171616;
-    -fx-text-fill: #e7e1e1;
+    -fx-background-color: #333333; /* Dark gray */
+    -fx-text-fill: #e7e1e1; /* Light text */
 }
 
-
-.menu_bar{
+.menu_bar {
     -fx-background-color: black;
 }
 
-.menu_bar .label{
+.menu_bar .label {
     -fx-background-color: black;
     -fx-font-size: 15 pt;
-        -fx-text-fill: white;
+    -fx-text-fill: white;
 }
 
-.menu_options .label{
+.menu_options .label {
     -fx-background-color: black;
-        -fx-text-fill: white;
+    -fx-text-fill: white;
+}
 
-}
-.menu_items{
+.menu_items {
     -fx-background-color: black;
 }
+
 .text_field_pane {
-    -fx-background-color: #424242;
+    -fx-background-color: #424242; /* Gray */
 }
 
 .text_field {
@@ -61,65 +59,65 @@
     -fx-text-fill: white;
 }
 
-
-
-.image_view{
+.image_view {
     -fx-background-color: black;
     -fx-border-color: white;
     -fx-border-width: 2;
     -fx-stroke: white;
 }
-.table-view:focused .table-row-cell:selected .table-cell {
-    -fx-background-color: lightBlue;
-    -fx-text-fill: grey;
-}
+
 .table-view .column-header,
 .table-view .column-header-background .filler {
-    -fx-background-color:  #6622CC;
+    -fx-background-color: #6622CC; /* Purple header */
 }
-.table-view .column-header .label{
-   -fx-text-fill: white;
-   -fx-font-weight: bold;
-   -fx-alignment: CENTER_LEFT;
-}
-.table-view .cell{
-   -fx-cell-size: 35;
-  -fx-alignment: center-left;
-  -fx-background-color: #444;
-  -fx-border-color: #29292D;
-  -fx-text-fill: lightgray;
-  -fx-alignment: CENTER_LEFT;
 
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
 }
+
+.table-view .cell {
+    -fx-cell-size: 35;
+    -fx-alignment: center-left;
+    -fx-background-color: #444; /* Dark gray */
+    -fx-border-color: #29292D;
+    -fx-text-fill: lightgray;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-view .cell:empty {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
 .table-row-cell:selected {
-   -fx-background-color: whitesmoke;
-   -fx-text-background-color:  #aa22CC;
+    -fx-background-color: #551A8B; /* Dark purple */
+    -fx-text-fill: white;
 }
 
-/* scroll bar starts here */
-
-/* The increment and decrement button CSS class of scrollbar */
-.table-view .increment-button ,.table-view .decrement-button {
-    -fx-background-color:transparent;
-	-fx-background-radius: 2em;
-
+.table-view:focused .table-row-cell:selected .table-cell {
+    -fx-background-color: #6622CC; /* Purple */
+    -fx-text-fill: white;
 }
 
-/* The main scrollbar **track** CSS class  */
+/* Scrollbar Styling */
+.table-view .increment-button, .table-view .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 2em;
+}
+
 .table-view .scroll-bar:horizontal .track,
-.table-view .scroll-bar:vertical .track{
-	-fx-background-color: transparent;
-	-fx-border-color:derive( #6622CC,80%);
-
-	-fx-background-radius: 2em;
-	-fx-border-radius:2em;
+.table-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: derive(#6622CC, 80%);
+    -fx-background-radius: 2em;
+    -fx-border-radius: 2em;
 }
 
-/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
 .table-view .scroll-bar:horizontal .thumb,
 .table-view .scroll-bar:vertical .thumb {
-    -fx-background-color:derive( #6622CC,90%);
-	-fx-background-insets: 2, 0, 0;
-	-fx-background-radius: 2em;
-
+    -fx-background-color: derive(#6622CC, 90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
 }
